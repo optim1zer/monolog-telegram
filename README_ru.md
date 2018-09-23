@@ -1,24 +1,24 @@
 # monolog-telegram
-Handler for Monolog to send logs by Telegram in HTML format
+Handler для Monolog, который позволяет отправлять логи в Telegram в формате HTML
 
-Requirements
+Требования
 ------------
 
 - PHP 5.6 or above
 - Guzzle 6+
 
-Instalation with composer
+Установка через composer
 -------------------------
 
 ```bash
 composer require optim1zer/monolog-telegram  
 ```
 
-Declaring handler object
+Инициализация объекта
 ------------------------
 
-To declare this handler, you need to know the bot token and the chat identifier(chat_id) to
-which the log will be sent.
+Для инициализации объекта хэндлера вы должны знать токен бота и ID чата, в который бот будет слать логи.
+Где их взять описано чуть ниже.
 
 ```php
 // ...
@@ -26,7 +26,7 @@ $handler = new \optim1zer\Monolog\TelegramHandler('<token>', <chat_id>, <log_lev
 // ...
 ```
 
-**Example:**
+**Пример использования:**
 
 ```php
 $log = new \Monolog\Logger('telegram_channel');
@@ -42,9 +42,9 @@ $log->pushHandler($handler);
 $log->debug('Test message');
 ```
 
-The above example is using standard LineFormatter from Monolog package. You can write and use your own message formatter for better logs format.
+В примере используется стандартный LineFormatter, который идет в комплекте с Monolog. Вы можете написать собственный formatter, чтобы сделать ваши логи более наглядными.
 
-**Example with proxy (for russian servers):**
+**Пример с прокси (для русских серверов):**
 
 ```php
 $handler = new \optim1zer\Monolog\TelegramHandler('<token>', <chat_id>, <log_level>);
@@ -52,15 +52,14 @@ $handler->setProxy('http://username:password@192.168.16.1:80'); // or simply 'ht
 $handler->setFormatter(new \Monolog\Formatter\LineFormatter("%message%", null, true));
 ```
 
-Creating a bot
+Создание бота
 --------------
 
-To use this handler, you need to create your bot on telegram and receive the Bot API access token.
-To do this, start a conversation with **@BotFather**.
+Чтобы создать бота и получить для него API-токен обратимся **@BotFather** в Telegram.
 
-**Conversation example:**
+**Пример создания:**
 
-In the example below, I'm talking to **@BotFather**. to create a bot named "Logger Bot" with user "@logger_bot".
+В примере ниже, я создаю бота с именем "Logger Bot" и ником "@logger_bot" с помощью **@BotFather**.
 
 ```
 Me: /newbot
@@ -85,15 +84,15 @@ Use this token to access the HTTP API:
 For a description of the Bot API, see this page: https://core.telegram.org/bots/api
 ```
 
-Get a chat identifier
+Получение ID чата
 ----------------------
 
-To retrieve the chat_id in which the logs will be sent, the recipient user will first need a conversation with 
-the bot. After the conversation has started, make the request below to know the chat_id of that conversation.
+Чтобы получить ID чата найдите вашего бота в Telegram и напишите ему личное сообщение.
+После этого выполните следующий запрос, чтобы узнать ID чата. Не забудьте заменить <token> на полученный выше токен. 
 
-**URL:** https://api.telegram.org/bot_token_/getUpdates
+**URL:** https://api.telegram.org/bot<token>/getUpdates
 
-**Example:**
+**Пример:**
 
 ```
 Request
@@ -130,4 +129,4 @@ Response
 }
 ```
 
-In the above request, the chat_id is represented by the number "123456789" (result.message.chat.id).
+В примере выше ID чата: "123456789" (result.message.chat.id).
